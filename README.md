@@ -22,8 +22,8 @@ To make sure it's working, you can check out the example file, and try that
 
 ## Stuff not implemeted yet, but will be
 
- * [backpack.py](tf2backpackpy\backpack.tf) ~ create_listings_subscription, delete_listing_subscription
- * [listings.py](tf2backpackpy\listings.tf) ~ create_listing
+ * [backpack.py](https://github.com/Zwork101/backpack.py/blob/master/tf2backpackpy/backpack.py) ~ create_listings_subscription, delete_listing_subscription
+ * [listings.py](https://github.com/Zwork101/backpack.py/blob/master/tf2backpackpy/listings.py) ~ create_listing
  
 I relize I have a couple of things left to add, but those will be for more major updates
 
@@ -33,7 +33,7 @@ I relize I have a couple of things left to add, but those will be for more major
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
+This project is licensed under the MIT License - see the [LICENSE](https://github.com/Zwork101/backpack.py/blob/master/MIT_License) file for details
 
 ## Acknowledgments
 

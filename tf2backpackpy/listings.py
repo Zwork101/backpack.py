@@ -7,6 +7,8 @@ class Listings:
     GET_LISTINGS = "https://backpack.tf/api/classifieds/listings/v1?"
     POST_LISTINGS = "https://backpack.tf/api/classifieds/list/v1?"
     SEARCH_LISTINGS = "https://backpack.tf/api/classifieds/search/v1?"
+    GET_TOKEN = "https://backpack.tf/api/aux/token/v1?"
+    GET_KEY = "https://backpack.tf/api/aux/key/v1?"
 
     def __init__(self, APIkey='', Token=''):
         if Token == '' and APIkey == '':
@@ -17,14 +19,14 @@ class Listings:
             self.key = APIkey
 
     def get_token(self):
-        result = requests.get(Backpack.GET_TOKEN,{'key':self.key})
+        result = requests.get(Listings.GET_TOKEN,{'key':self.key})
         if "message" in result.json().keys():
             raise InvalidLogin(result.json()['message'])
         self.token = result.json()['token']
         return None
 
     def get_key(self):
-        result = requests.get(Backpack.GET_KEY,{'token':self.token})
+        result = requests.get(Listings.GET_KEY,{'token':self.token})
         if "message" in result.json().keys():
             raise InvalidLogin(result.json()['message'])
         self.key = result.json()['key']['$oid']

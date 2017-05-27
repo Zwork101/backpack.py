@@ -70,20 +70,21 @@ class Backpack:
             raise RequestError(get.json()['message'])
         return get.json()["subscriptions"]
 
-    def create_listings_subscription(self,item_name,intent,min,max,blanket=None,currency=None):
+        def create_listings_subscription(self,item_name,intent,blanket=0,currency=0,min=0,max=0):
         item_name = quote(item_name)
-        if blanket == None and currency == None:
+        if blanket == 0 and currency == 0:
             raise MustHaveAtleastOneParameter()
-        if blanket and currency != None:
-            print('Bolth not none')
+        if blanket != 0 and currency != 0:
             raise MustHaveAtleastOneParameter()
-        if blanket != None:
-            put = requests.put(Backpack.LISTING_SUBSCRIPTIONS,{'token':self.token,'intent':intent,'blanket':blanket,'min':min,'max':max})
+        else:
+            put = requests.put(Backpack.LISTING_SUBSCRIPTIONS,{'token':self.token,'intent':intent,'blanket':blanket, \
+                               'min':min,'max':max, 'currency':currency})
             try:
                 if 'message' in put.json().keys():
                     raise RequestError(put.json()['message'])
-            except json.decoder.JSONDecodeError:
                 return put.content.decode()
+            except json.decoder.JSONDecodeError:
+                RequestError("listing was not created")
 
     def delete_listing_subscription(self, item_name, intent):
         item_name = quote(item_name)

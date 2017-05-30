@@ -2,12 +2,11 @@
 
 This is a library for Backpack.tf's API
 
-## Getting Started
+## Getting Started 
 
- * Download and extract library
- * Go to the directory in which the file is in (Through the terminal)
- * Then type `pip install .`
- * And your done! You can now use backpack.py anywhere!
+```
+pip install -U tf2backpackpy
+```
 
 ### Requirments
 
@@ -24,6 +23,7 @@ To make sure it's working, you can check out the example file, and try that
 
  * [backpack.py](https://github.com/Zwork101/backpack.py/blob/master/tf2backpackpy/backpack.py) ~ create_listings_subscription, delete_listing_subscription
  * [listings.py](https://github.com/Zwork101/backpack.py/blob/master/tf2backpackpy/listings.py) ~ create_listing
+ * Might be more listed, usually ther're non-GET requests. Please, I'll do what I can, but usually this is backpack.tf's horrible API
  
 I relize I have a couple of things left to add, but those will be for more major updates
 

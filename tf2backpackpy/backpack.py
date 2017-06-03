@@ -70,7 +70,7 @@ class Backpack:
             raise RequestError(get.json()['message'])
         return get.json()["subscriptions"]
 
-        def create_listings_subscription(self,item_name,intent,blanket=0,currency=0,min=0,max=0):
+    def create_listings_subscription(self,item_name,intent,blanket=0,currency=0,min=0,max=0):
         item_name = quote(item_name)
         if blanket == 0 and currency == 0:
             raise MustHaveAtleastOneParameter()

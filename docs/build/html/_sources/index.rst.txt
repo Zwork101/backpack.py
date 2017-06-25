@@ -10,7 +10,8 @@ Welcome to backpack.py-docs's documentation!
    :maxdepth: 2
    :caption: Contents:
 
-   :link: backpack-docs-main
+   backpack-docs-main
+   ...
 
 
 
@@ -20,3 +21,4 @@ Indices and tables
 * :ref:`genindex`
 * :ref:`modindex`
 * :ref:`search`
+

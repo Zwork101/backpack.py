@@ -1,0 +1,1 @@
+Search.setIndex({docnames:["backpack-docs-main","index"],envversion:53,filenames:["backpack-docs-main.rst","index.rst"],objects:{},objnames:{},objtypes:{},terms:{fun:0,have:0,index:1,modul:1,out:0,page:1,search:1,test:0,thi:0},titles:["&lt;no title&gt;","Welcome to backpack.py-docs\u2019s documentation!"],titleterms:{backpack:1,doc:1,document:1,indic:1,tabl:1,welcom:1}})

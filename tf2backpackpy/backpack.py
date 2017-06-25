@@ -71,14 +71,16 @@ class Backpack:
         return get.json()["subscriptions"]
 
     def create_listings_subscription(self,item_name,intent,blanket=0,currency=0,min=0,max=0):
-        item_name = quote(item_name)
         if blanket == 0 and currency == 0:
             raise MustHaveAtleastOneParameter()
         if blanket != 0 and currency != 0:
             raise MustHaveAtleastOneParameter()
         else:
-            put = requests.put(Backpack.LISTING_SUBSCRIPTIONS,{'token':self.token,'intent':intent,'blanket':blanket, \
+            put = requests.put(Backpack.LISTING_SUBSCRIPTIONS,{'token':self.token,'intent':intent,'item_name':item_name, 'blanket':blanket, \
                                'min':min,'max':max, 'currency':currency})
+            print(put.request.url)
+            print(put.text)
+            print(put.status_code)
             try:
                 if 'message' in put.json().keys():
                     raise RequestError(put.json()['message'])

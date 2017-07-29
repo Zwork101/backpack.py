@@ -2,7 +2,8 @@ import base64
 import time
 import rsa
 import requests
-from steampy import guard
+from guard import generate_one_time_code
+from bs4 import BeautifulSoup
 
 class Login(object):
     def __init__(self, username, password, shared_secret):
@@ -30,7 +31,7 @@ class Login(object):
         loginForm = dict({
             "password": encrypted_password,
             "username": str(username),
-            "twofactorcode": guard.generate_one_time_code(str(shared_secret), int(time.time())),
+            "twofactorcode": generate_one_time_code(str(shared_secret), int(time.time())),
             "emailauth": "",
             "loginfriendlyname": "",
             "captchagid": "-1",
@@ -63,3 +64,24 @@ class Login(object):
 
     def getInfo(self):
         return self.loginReq
+
+    def start_backpack_session(self):
+        self.loginSession = self.getInfo()
+        self.openid_response = self.loginSession.post("https://backpack.tf/login")
+        self.response_html = self.openid_response.text
+        self.parameters = self.returnParameters(self.response_html)
+        self.auth_resp = self.loginSession.post(self.openid_response.url, data=self.parameters)
+
+    @staticmethod
+    def returnParameters(html):
+        soup = BeautifulSoup(html, "lxml")
+        action = soup.findAll("input", {"name": "action"})[0]['value']  # Or "steam_openid_login" in most of the cases
+        mode = soup.findAll("input", {"name": "openid.mode"})[0]['value']  # Or "checkid_setup" in most of the cases
+        openidparams = soup.findAll("input", {"name": "openidparams"})[0]['value']
+        nonce = soup.findAll("input", {"name": "nonce"})[0]['value']
+        return {
+            "action": action,
+            "openid.mode": mode,
+            "openidparams": openidparams,
+            "nonce": nonce
+        }

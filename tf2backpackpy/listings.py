@@ -6,6 +6,8 @@ class Listings:
     GET_TOKEN = "https://backpack.tf/api/aux/token/v1?"
     REMOVE_LISTING = "https://backpack.tf/classifieds/remove/"
     SELL_LISTING = "https://backpack.tf/classifieds/sell/"
+    GET_MY_LISTINGS = "https://backpack.tf/api/classifieds/listings/v1"
+    GET_LISTINGS = "https://backpack.tf/api/classifieds/search/v1"
 
     def __init__(self, username, password, shared_secret, apikey=''):
         self._session = login.Login(username, password, shared_secret)
@@ -69,3 +71,24 @@ class Listings:
         r = requests.Request('POST', url, headers=headers, cookies=self.cookies, data=data)
         prepped = r.prepare()
         return self._session.send(prepped)
+
+    def get_my_listings(self, item_names=0, intent:int=None, inactive=1):
+        if not self.apikey:
+            raise ValueError('apikey not supplied')
+        payload = {'item_names':item_names, 'inactive':inactive, 'token':self.token}
+        if intent:
+            payload['intent'] = intent
+        r = requests.get(Listings.GET_MY_LISTINGS, payload).json()
+        if 'message' in r.keys():
+            raise Exception(r['message'])
+        return r
+
+    def search_listings(self, item, item_names=0, intent:('dual', 'buy', 'sell')='dual', page_size=10, fold=1, steamid=None, **kwargs):
+        if not self.apikey:
+            raise ValueError('apikey not supplied')
+        payload = {'item':item, 'item_names':item_names, 'intent':intent, 'page_size':page_size, 'fold':fold, 'key':self.apikey}
+        if steamid:
+            payload['steamid'] = steamid
+        payload.update(kwargs)
+        r = requests.get(Listings.GET_LISTINGS, payload).json()
+        return r

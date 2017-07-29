@@ -40,5 +40,6 @@ This project is licensed under the MIT License - see the [LICENSE](https://githu
 * Backpack.tf!!!!
 * People who use this lib
 * Works well with the [steam](https://github.com/ValvePython/steam) and [steampy](https://github.com/bukson/steampy) Packages
+* Huge thanks to [ShellRox](https://github.com/ShellRox) aka, MrRM, for working with me on logging into backpack.tf through steam!
 
 

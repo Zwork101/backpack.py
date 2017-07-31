@@ -1,5 +1,6 @@
 import login
 import requests
+from urllib import parse
 
 class Listings:
 
@@ -8,6 +9,7 @@ class Listings:
     SELL_LISTING = "https://backpack.tf/classifieds/sell/"
     GET_MY_LISTINGS = "https://backpack.tf/api/classifieds/listings/v1"
     GET_LISTINGS = "https://backpack.tf/api/classifieds/search/v1"
+    BUY_LISTING = "https://backpack.tf/classifieds/buy/"
 
     def __init__(self, username, password, shared_secret, apikey=''):
         self._session = login.Login(username, password, shared_secret)
@@ -45,8 +47,19 @@ class Listings:
         }
         return headers
 
-    def remove_listing(self, appid:str, assetid:str, steamid:str):
+    def _supply_data(self, metal, keys, details, offers, buyout, tradeoffer_url):
+        data = {
+            "user-id": self.cookies['user-id'],
+            "currencies[metal]": metal,
+            "currencies[keys]": keys,
+            "details": details,
+            "offers": offers,
+            "buyout": buyout,
+            "tradeoffers_url": tradeoffer_url
+        }
+        return data
 
+    def remove_sell_listing(self, appid:str, assetid:str, steamid:str):
         url = Listings.REMOVE_LISTING + appid+'_'+assetid
         headers = Listings.gen_headers(f'/classifieds/remove/{assetid}',
                                    f'https://backpack.tf/classifieds?steamid={steamid}')
@@ -55,20 +68,32 @@ class Listings:
         prepped = r.prepare()
         return self._session.send(prepped)
 
-    def create_sell_listing(self, assetid, metal, keys, tradeoffer_url, offers=1, buyout=0, details=''):
+    def remove_buy_listing(self, appid:str, steamid:str, obj_id:str):
+        id = f'{appid}_{steamid}_{obj_id}'
+        headers = Listings.gen_headers(f'/classifieds/remove/{id}',
+                                       f'https://backpack.tf/classifieds?steamid={steamid}')
+        r = requests.Request('POST', Listings.REMOVE_LISTING + id, headers=headers, cookies=self.cookies,
+                             data={'user-id': self.cookies['user-id']})
+        prepped = r.prepare()
+        return self._session.send(prepped)
 
+    def create_sell_listing(self, assetid, metal, keys, tradeoffer_url, offers=1, buyout=0, details=''):
         url = Listings.SELL_LISTING + assetid
         headers = Listings.gen_headers(f'/classifieds/sell/{assetid}', url)
-        data = {
-            "user-id":self.cookies['user-id'],
-            "currencies[metal]":metal,
-            "currencies[keys]":keys,
-            "details":details,
-            "offers":offers,
-            "buyout":buyout,
-            "tradeoffers_url":tradeoffer_url
-        }
+        data = self._supply_data(metal, keys, details, offers, buyout, tradeoffer_url)
         r = requests.Request('POST', url, headers=headers, cookies=self.cookies, data=data)
+        prepped = r.prepare()
+        return self._session.send(prepped)
+
+    def create_buy_listing(self, type, item, tradeoffers_url, metal, keys, craftable=True, offers=1, buyout=0, details=''):
+        data = self._supply_data(metal, keys, details, offers, buyout, tradeoffers_url)
+        url = f'{type}/{parse.quote(item)}/Tradable/'
+        if craftable:
+            url += 'Craftable'
+        else:
+            url += 'Non-Craftable'
+        headers = Listings.gen_headers(url, Listings.BUY_LISTING + url)
+        r = requests.Request('POST', Listings.BUY_LISTING + url, headers=headers, cookies=self.cookies, data=data)
         prepped = r.prepare()
         return self._session.send(prepped)
 
